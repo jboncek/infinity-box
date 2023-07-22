@@ -132,5 +132,5 @@ bool isEven(int i)
 int getMaxLux(){
   int result = analogRead(KNOB_PIN);
   int scaled = map(result, 0, 1023, 0, MAX_LUX);
-  return scaled;
+  return MAX_LUX;
 }
