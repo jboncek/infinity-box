@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "FastLED.h"
 
-#define NUM_LEDS 277
+#define NUM_LEDS 118
 #define LED_PIN 7
 #define KNOB_PIN A0
 #define MAX_LUX 150
