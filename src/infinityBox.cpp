@@ -13,7 +13,7 @@ int _currentIndex = -1;
 uint8_t _currentHue = -1;
 uint8_t _currentLux = 0;
 int _currentProgramId = -1;
-boolean _debugEnabled = true;
+boolean _debugEnabled = false;
 void debug(const char *);
 void debug(const char *, int);
 
@@ -119,9 +119,10 @@ class RotatingHue: public BaseProgram {
 
     void main(int index, uint8_t hue, uint8_t lux)
     {
-      if(index == 0){
+      if(true){
         FastLED.show();
       }
+      delay(30);
       setHue(index, hue);
     }
 };
