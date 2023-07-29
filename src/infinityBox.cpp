@@ -10,23 +10,43 @@
 
 CRGB _leds[NUM_LEDS];
 int _currentIndex = -1;
-uint8_t _currentHue;
-int _currentLux;
+uint8_t _currentHue = -1;
+uint8_t _currentLux = 0;
 int _currentProgramId = -1;
+boolean _debugEnabled = true;
+void debug(const char *);
+void debug(const char *, int);
+
+void debug(const char * message){
+  if(_debugEnabled){
+    Serial.println(message);
+  }
+}
+
+void debug(const char * message, int someNumber){
+  if(_debugEnabled){
+    Serial.print(message);
+    Serial.print(" ");
+    Serial.println(someNumber, DEC);
+  }
+}
 
 class BaseProgram {
   public:
     /// @brief Called when first detected as active
     /// @return void
     void setup() {
-      Serial.write("setup app");
-      int idHue = map(getProgramId(), 0, MAX_PROGRAMS, 0, 255);
+      debug("base program setup app");
+      // todo fix: get prog id below is always base = 0
+      uint8_t idHue = map(getProgramId(), 0, MAX_PROGRAMS, 0, 255);
       for(int i = 0; i < NUM_LEDS; i++){
         setHue(i, idHue);
       }
+      FastLED.setBrightness(MAX_LUX);
       FastLED.show();
+      delay(300);
     }
-
+  
     /// @brief Used as program collection index and program change identifier. Override to be unique and > 0.  
     /// @return int
     int getProgramId(){
@@ -35,19 +55,19 @@ class BaseProgram {
 
     /// @brief Default behavior loops the led array and back to 0 automatically. Override if needed.  
     /// @return int
-    int getNextIndex(int currentIndex){
-      if(currentIndex == NUM_LEDS){
-        return 0;
-      }
-      return currentIndex++;
-    }
+    // int getNextIndex(int currentIndex){
+    //   if(currentIndex == NUM_LEDS){
+    //     return 0;
+    //   }
+    //   return currentIndex++;
+    // }
 
     /// @brief Defines the hue to use for the next LED.  Override probably.
     /// @return uint8_t
-    uint8_t getNextHue(){
-      // override as needed
-      return 0;
-    }
+    // uint8_t getNextHue(){
+    //   // override as needed
+    //   return 0;
+    // }
 
     /// @brief Defines the lux to use for the next LED index iteration.  Lux cannot be controlled per LED. Override if needed.
     /// @return int
@@ -65,7 +85,6 @@ class BaseProgram {
     }
 
     void setHue(int index, uint8_t hue){
-      Serial.write("set the hue");
       _leds[index] = CHSV(hue, 255, 255);
     }
 
@@ -81,23 +100,30 @@ class RotatingHue: public BaseProgram {
       return 1;
     }
 
-    uint8_t getNextHue(){
-      return _nextHue;
+    uint8_t getNextHue(uint8_t currentHue){
+      if(currentHue == 254){
+        debug("reset hue loop");
+        return 0;
+      }
+      return currentHue + 1;
     }
 
-    void main(int index, uint8_t hue, int lux)
+    int getNextIndex(int currentIndex){
+      if(currentIndex == NUM_LEDS){
+        debug("reset index loop");
+        return 0;
+      }
+      int newIndex = currentIndex + 1;
+      return newIndex;
+    }
+
+    void main(int index, uint8_t hue, uint8_t lux)
     {
-      Serial.write("main loop");
-        FastLED.setBrightness(lux);
+      if(index == 0){
         FastLED.show();
-        Serial.write("show the stuff");
-        delay(200);
+      }
       setHue(index, hue);
-      _nextHue = hue++;
     }
-
-  private:
-    uint8_t _nextHue;
 };
 
 class Conductor {
@@ -116,14 +142,10 @@ class Conductor {
     }
 
     RotatingHue getActiveProgram(int currentProgramId){
-      int result = analogRead(KNOB_PIN);
-      int activeProgramIndex = map(result, 0, 1023, 0, MAX_PROGRAMS);
-      RotatingHue activeProgram = getProgram(activeProgramIndex);
-      if(activeProgram.getProgramId() < 1){
-        // this is to preven failures.  Don't rely on this. Set the right prog id.
-        Serial.write("default program");
-        return getProgram(1);
-      }
+      // todo: knob disabled for testing
+      //int result = analogRead(KNOB_PIN);
+      //int activeProgramIndex = map(result, 0, 1023, 0, MAX_PROGRAMS);
+      RotatingHue activeProgram = getProgram(currentProgramId);
       if(activeProgram.getProgramId() != currentProgramId){
         resetState();
         activeProgram.setup();
@@ -139,14 +161,15 @@ class Conductor {
     }
 
     RotatingHue getProgram(int index){
-      Serial.write("getting program");
+      if(index < 1){
+        return _programs[1];
+      }
       RotatingHue app = _programs[index];
-      Serial.write("got app");
       return app;
     }
 
     void resetState(){
-      Serial.write("App reset state");
+      debug("app state reset");
       _currentIndex = -1;
       _currentHue = 0;
       _currentLux = 0;
@@ -184,16 +207,20 @@ void setup()
   FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(_leds, NUM_LEDS);
   FastLED.setBrightness(0);
   Serial.begin(9600);
-  Serial.write("setup complete");
+  debug("setup complete");
   _conductor = Conductor();
 }
 
 void loop()
 {
   RotatingHue program = _conductor.getActiveProgram(_currentProgramId);
+  _currentProgramId = program.getProgramId();
   int lastIndex = _currentIndex;
+  uint8_t lastHue = _currentHue;
+  debug("loop index", _currentIndex);
+  debug("loop hue", _currentHue);
   _currentIndex = program.getNextIndex(lastIndex);
-  _currentHue = program.getNextHue();
+  _currentHue = program.getNextHue(lastHue);
   _currentLux = program.getNextLux();
   program.main(_currentIndex, _currentHue, _currentLux);
 }
