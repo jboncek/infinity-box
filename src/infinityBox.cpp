@@ -87,6 +87,10 @@ class LedCommon {
 
 class ILedProgram {
   public:
+    /// @brief Set upon boot as program index and program change identifier.
+    /// @return int
+    int programId;
+
     /// @brief Default behavior loops the led array and back to 0 automatically. Override if needed.  
     /// @return int
     virtual int getNextIndex(int currentIndex) = 0;
@@ -103,10 +107,6 @@ class ILedProgram {
     /// @return void
     virtual void setup() = 0;
 
-    /// @brief Used as program collection index and program change identifier. Override to be unique and > 0.  
-    /// @return int
-    int programId;
-
     /// @brief The main function called from the loop.  Ideal behavior is to allow frequent main loops.
     /// This provides responsive program control.  By default, the index will iterate all LEDs. 
     /// Within main(), Call if(index = 0){  FastLED.show(); delay(200); } or similar to update the LEDs.
@@ -114,7 +114,7 @@ class ILedProgram {
     virtual void main(int index, uint8_t hue, uint8_t lux) = 0;
   };
 
-#pragma region LED_Programs
+#pragma region //LED_Programs
 
 class RotatingHue: public ILedProgram {
   public:
@@ -210,7 +210,7 @@ class Chaos: public ILedProgram {
         _common.fade(lux, 15);
         delay(30);
       }else if (_countSinceUpdate == NUM_LEDS){
-        FastLED.show();
+        _common.fade(lux, 15);
         _countSinceUpdate = 0;
       }else{
         _countSinceUpdate++;
@@ -226,6 +226,7 @@ class Mimi: public ILedProgram {
     Mimi(){
       LedCommon common;
       _common = common;
+      _updatePerLed = true;
     }
 
     void setup(){
@@ -262,17 +263,18 @@ class Mimi: public ILedProgram {
 
     void main(int index, uint8_t hue, uint8_t lux)
     {
-      if(true){
-        FastLED.show();
-      }
-      delay(30);
       _common.setHue(index, hue);
+      if(_updatePerLed || index == 0){
+        _common.fade(lux);
+      }
     }
+
   private: 
     LedCommon _common;
+    boolean _updatePerLed;
 };
 
-#pragma endregion
+#pragma endregion //LED_Programs
 
 class Conductor {
   public:
@@ -348,7 +350,7 @@ class Conductor {
 
 Conductor _conductor;
 
-#pragma region Arduino Functions
+#pragma region //Arduino_Functions
 void setup()
 {
   FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(_leds, NUM_LEDS);
@@ -374,4 +376,4 @@ void loop()
   _currentLux = program.getNextLux(lastLux);
   program.main(_currentIndex, _currentHue, _currentLux);
 }
-#pragma endregion
+#pragma endregion //Arduino_Functions
