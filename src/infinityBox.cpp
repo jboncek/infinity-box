@@ -207,10 +207,10 @@ class Chaos: public ILedProgram {
       boolean updatePerLed = true;
       _common.setHue(ledIndex, hue);
       if(updatePerLed){
-        _common.fade(lux, 15);
+        FastLED.show();
         delay(30);
       }else if (_countSinceUpdate == NUM_LEDS){
-        _common.fade(lux, 15);
+        FastLED.show();
         _countSinceUpdate = 0;
       }else{
         _countSinceUpdate++;
