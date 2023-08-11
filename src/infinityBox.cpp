@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include "FastLED.h"
 
-#define NUM_LEDS 120
+#define NUM_LEDS 119
 #define LED_PIN 7
 #define KNOB_PIN A0
 #define MAX_LUX 100
@@ -199,7 +199,7 @@ class Chaos: public ILedProgram {
     }
 
     uint8_t getNextLux(uint8_t _currentLux) {
-      return _common.getRandomNumber(0, 255);
+      return _common.getRandomNumber(0, MAX_LUX);
     }
 
     void main(int ledIndex, uint8_t hue, uint8_t lux)
