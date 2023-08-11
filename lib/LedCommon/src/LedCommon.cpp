@@ -8,13 +8,6 @@
 #define MAX_PROGRAMS 5
 #define COLOR_ORDER GRB
 
-CRGB _leds[NUM_LEDS];
-// int _currentIndex = -1;
-// uint8_t _currentHue = -1;
-// uint8_t _currentLux = -1;
-//int _currentProgramId = -1;
-boolean _debugEnabled = false;
-
 void LedCommon::setup(){
     FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(_leds, NUM_LEDS);
     FastLED.setBrightness(MAX_LUX);
@@ -37,7 +30,7 @@ void LedCommon::debug(const char * message, int someNumber){
   }
 }
 
-void fade(uint8_t targetLux, int msDelay, uint8_t startingLux){
+void LedCommon::fade(uint8_t targetLux, int msDelay, uint8_t startingLux){
     if(startingLux < targetLux){
     for (uint8_t i = startingLux; i <= targetLux; i++){
         FastLED.setBrightness(i);
@@ -55,38 +48,38 @@ void fade(uint8_t targetLux, int msDelay, uint8_t startingLux){
 
 /// @brief Helper wraps the LED library to set the lux for all LEDs
 /// @return void
-void setLux(uint8_t lux){
+void LedCommon::setLux(uint8_t lux){
     FastLED.setBrightness(lux);
 }
 
 /// @brief Helper wraps the LED library to set the hue for an LED
 /// @return void
-void setHue(int index, uint8_t hue) {
-    _leds[index] = CHSV(hue, 255, 255);
+void LedCommon::setHue(int index, uint8_t hue) {
+    this->_leds[index] = CHSV(hue, 255, 255);
 }
 
 /// @brief Helper wraps the LED library to set the RGB color for an LED
 /// @return void
-void setRgb(int index, int r, int g, int b)
+void LedCommon::setRgb(int index, int r, int g, int b)
 {
-    _leds[index] = CHSV(r, g, b);
+    this->_leds[index] = CHSV(r, g, b);
 }
 
 /// @brief Generates a random number within the given range
 /// @return int
-int getRandomNumber(int startingNumber, int endingNumber){
+int LedCommon::getRandomNumber(int startingNumber, int endingNumber){
     int random = startingNumber + (rand() % endingNumber);
     return random;
 }
 
-int getNumLeds(){
+int LedCommon::getNumLeds(){
     return NUM_LEDS;
 }
 
-uint8_t getMaxLeds(){
+uint8_t LedCommon::getMaxLux(){
     return MAX_LUX;
 }
 
-void show(){
+void LedCommon::show(){
     FastLED.show();
 }

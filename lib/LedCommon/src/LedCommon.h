@@ -1,5 +1,8 @@
+#pragma once
+
 #include <stdint.h>
 #include <Arduino.h>
+#include "FastLED.h"
 
 #ifndef LED_COMMON_H
 #define LED_COMMON_H
@@ -39,12 +42,16 @@ class LedCommon {
     
     /// @brief When _debugEnabled is true, logs "message number" via Serial.println
     void debug(const char *, int);
-
+    
     int getNumLeds();
 
     uint8_t getMaxLux();
 
     void show();
+
+    boolean _debugEnabled;
+  private:
+    CRGB _leds[119];
 };
 
 #endif /*LED_COMMON_H*/

@@ -1,13 +1,21 @@
 #include <stdint.h>
+#include <LedCommon.h>
+
+#pragma once
 
 #ifndef LED_PROGRAM_H
 #define LED_PROGRAM_H
 
 class ILedProgram {
   public:
+    ILedProgram():_common(LedCommon()),_programId(0){}
+    
+    LedCommon _common;
+
     /// @brief Set upon boot as program index and program change identifier.
     /// @return int
     int _programId;
+    
 
     /// @brief Called when first detected as active.
     /// @return void
