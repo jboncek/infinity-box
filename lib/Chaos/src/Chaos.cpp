@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 void Chaos::setup(){
+    this->ILedProgram::_common.setup();
     this->ILedProgram::_common.debug("Chaos program setup fn");
     for(int s = 0; s < 3; s++){
         for(int i = 0; i < this->ILedProgram::_common.getNumLeds(); i++){

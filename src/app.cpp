@@ -8,13 +8,9 @@
 
 
 Conductor _conductor;
-CRGB _leds[119];
 
 void setup()
 {
-    FastLED.addLeds<WS2812B, 7, GRB>(_leds, 119);
-    FastLED.setBrightness(100);
-    FastLED.show();
   _conductor.setup();
   ILedProgram *rotatingHue = new RotatingHue();
   _conductor.addProgram(rotatingHue);

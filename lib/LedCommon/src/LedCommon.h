@@ -52,7 +52,7 @@ class LedCommon {
   private:
     CRGB _leds[119];
 
-    boolean _debugEnabled = true;
+    boolean _debugEnabled;
 };
 
 #endif /*LED_COMMON_H*/

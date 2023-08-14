@@ -9,11 +9,16 @@
 #define COLOR_ORDER GRB
 
 void LedCommon::setup(){
-    FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(this->LedCommon::_leds, NUM_LEDS);
-    FastLED.setBrightness(MAX_LUX);
+    this->LedCommon::_debugEnabled = false;
+    FastLED.addLeds<WS2812B, 7, GRB>(this->LedCommon::_leds, 119);
+    FastLED.setBrightness(100);
     if(this->LedCommon::_debugEnabled){
         Serial.begin(9600);
         this->debug("common setup");
+        _leds[1] = CHSV(0, 255, 255);
+        _leds[2] = CHSV(0, 255, 255);
+        _leds[3] = CHSV(0, 255, 255);
+        FastLED.show();
     }
 }
 

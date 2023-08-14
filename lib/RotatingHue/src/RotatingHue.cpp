@@ -3,6 +3,7 @@
 #include <Arduino.h>
 
 void RotatingHue::setup(){
+    this->ILedProgram::_common.setup();
     this->ILedProgram::_common.debug("RotatingHue program setup fn");
     uint8_t idHue = map(_programId, 0, 10, 0, 255);
     for(int i = 0; i < this->ILedProgram::_common.getNumLeds(); i++){
