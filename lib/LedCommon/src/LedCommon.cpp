@@ -9,21 +9,22 @@
 #define COLOR_ORDER GRB
 
 void LedCommon::setup(){
-    FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(_leds, NUM_LEDS);
+    FastLED.addLeds<WS2812B, LED_PIN, COLOR_ORDER>(this->LedCommon::_leds, NUM_LEDS);
     FastLED.setBrightness(MAX_LUX);
-    if(_debugEnabled){
+    if(this->LedCommon::_debugEnabled){
         Serial.begin(9600);
+        this->debug("common setup");
     }
 }
 
 void LedCommon::debug(const char * message){
-  if(_debugEnabled){
+  if(this->LedCommon::_debugEnabled){
     Serial.println(message);
   }
 }
 
 void LedCommon::debug(const char * message, int someNumber){
-  if(_debugEnabled){
+  if(this->LedCommon::_debugEnabled){
     Serial.print(message);
     Serial.print(" ");
     Serial.println(someNumber, DEC);
@@ -55,14 +56,15 @@ void LedCommon::setLux(uint8_t lux){
 /// @brief Helper wraps the LED library to set the hue for an LED
 /// @return void
 void LedCommon::setHue(int index, uint8_t hue) {
-    this->_leds[index] = CHSV(hue, 255, 255);
+    this->LedCommon::debug("set hue", index);
+    this->LedCommon::_leds[index] = CHSV(hue, 255, 255);
 }
 
 /// @brief Helper wraps the LED library to set the RGB color for an LED
 /// @return void
 void LedCommon::setRgb(int index, int r, int g, int b)
 {
-    this->_leds[index] = CHSV(r, g, b);
+    this->LedCommon::_leds[index] = CHSV(r, g, b);
 }
 
 /// @brief Generates a random number within the given range

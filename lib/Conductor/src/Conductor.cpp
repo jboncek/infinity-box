@@ -1,29 +1,28 @@
 #include "Conductor.h"
 #include <Arduino.h>
-#include "LedCommon.h"
 #include "RotatingHue.h"
 
 #define KNOB_PIN A0
 
-int _currentProgramId = -1;
-int _programCount = 0;
-ILedProgram *_apps[10];
+void Conductor::setup(){
+    this->Conductor::_common.setup();
+};
 
 void Conductor::addProgram(ILedProgram* app){
-    int newProgramId = _programCount++;
+    int newProgramId = this->Conductor::_programCount++;
     app->_programId = newProgramId;
-    _apps[newProgramId] = app;
+    this->_apps[newProgramId] = app;
 }
 
 ILedProgram* Conductor::getActiveProgram(){
     int result = analogRead(KNOB_PIN);
-    int activeProgramIndex = map(result, 0, 1023, 1, _programCount);
-    ILedProgram* activeProgram = _apps[activeProgramIndex];
-    if(activeProgram->_programId != _currentProgramId){
-        _currentProgramId = activeProgram->_programId;
+    int activeProgramIndex = map(result, 0, 1023, 1, this->Conductor::_programCount);
+    ILedProgram* activeProgram = this->_apps[activeProgramIndex];
+    if(activeProgram->_programId != this->Conductor::_currentProgramId){
+        this->Conductor::_currentProgramId = activeProgram->_programId;
         activeProgram->setup();
     }else{
-        //_common->debug("active program id", activeProgram->_programId);
+        //this->_common.debug("new active program", this->Conductor::_currentProgramId);
     }
     return activeProgram;
 }

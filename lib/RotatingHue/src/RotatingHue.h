@@ -1,7 +1,6 @@
 #pragma once
 
 #include "ILedProgram.h"
-#include <LedCommon.h>
 
 #ifndef ROTATING_HUE_H
 #define ROTATING_HUE_H

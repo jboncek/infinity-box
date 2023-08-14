@@ -49,9 +49,10 @@ class LedCommon {
 
     void show();
 
-    boolean _debugEnabled;
   private:
     CRGB _leds[119];
+
+    boolean _debugEnabled = true;
 };
 
 #endif /*LED_COMMON_H*/

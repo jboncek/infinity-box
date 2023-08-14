@@ -1,7 +1,7 @@
 #pragma once
 
 #include "ILedProgram.h"
-#include <LedCommon.h>
+#include <ILedProgram.h>
 
 #ifndef CHAOS_H
 #define CHAOS_H
