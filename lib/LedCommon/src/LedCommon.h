@@ -29,6 +29,10 @@ class LedCommon {
     /// @return void
     void setHue(int index, uint8_t hue);
 
+    /// @brief Helper wraps the LED library to set the hue for all LEDs
+    /// @return void
+    void setAllHue(uint8_t hue);
+
     /// @brief Helper wraps the LED library to set the RGB color for an LED
     /// @return void
     void setRgb(int index, int r, int g, int b);

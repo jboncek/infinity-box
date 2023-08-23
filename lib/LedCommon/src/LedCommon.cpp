@@ -2,23 +2,20 @@
 #include "FastLED.h"
 #include <Arduino.h>
 
-#define NUM_LEDS 119
+#define NUM_LEDS 116
 #define LED_PIN 7
 #define MAX_LUX 100
 #define MAX_PROGRAMS 5
 #define COLOR_ORDER GRB
 
 void LedCommon::setup(){
-    this->LedCommon::_debugEnabled = false;
+    this->LedCommon::_debugEnabled = true;
     FastLED.addLeds<WS2812B, 7, GRB>(this->LedCommon::_leds, 119);
     FastLED.setBrightness(100);
     if(this->LedCommon::_debugEnabled){
         Serial.begin(9600);
         this->debug("common setup");
-        _leds[1] = CHSV(0, 255, 255);
-        _leds[2] = CHSV(0, 255, 255);
-        _leds[3] = CHSV(0, 255, 255);
-        FastLED.show();
+
     }
 }
 
@@ -61,8 +58,15 @@ void LedCommon::setLux(uint8_t lux){
 /// @brief Helper wraps the LED library to set the hue for an LED
 /// @return void
 void LedCommon::setHue(int index, uint8_t hue) {
-    this->LedCommon::debug("set hue", index);
     this->LedCommon::_leds[index] = CHSV(hue, 255, 255);
+}
+
+/// @brief Helper wraps the LED library to set the hue for an LED
+/// @return void
+void LedCommon::setAllHue(uint8_t hue) {
+    for(int i = 0; i < NUM_LEDS; i++){
+        this->LedCommon::_leds[i] = CHSV(hue, 255, 255);
+    }
 }
 
 /// @brief Helper wraps the LED library to set the RGB color for an LED

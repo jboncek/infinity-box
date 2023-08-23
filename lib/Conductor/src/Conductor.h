@@ -12,12 +12,12 @@ class Conductor {
     void addProgram(ILedProgram* app);
     void resetState();
     void setup();
-  
-  private:
-    int _currentProgramId;
-    int _programCount;
-    ILedProgram *_apps[10];
     LedCommon _common;
+  private:
+    int _programCount = 0;
+    int _currentProgramId = 0;
+    ILedProgram *_apps[10];
+
 };
 
 #endif /*CONDUCTOR_H*/

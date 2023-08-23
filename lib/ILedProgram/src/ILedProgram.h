@@ -8,9 +8,9 @@
 
 class ILedProgram {
   public:
-    ILedProgram():_common(LedCommon()),_programId(0){}
+    ILedProgram(LedCommon* common):_common(common),_programId(0){}
 
-    LedCommon _common;
+    LedCommon* _common;
 
     /// @brief Set upon boot as program index and program change identifier.
     /// @return int
