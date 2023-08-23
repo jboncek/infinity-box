@@ -4,6 +4,7 @@
 #include <LedCommon.h>
 #include <RotatingHue.h>
 #include <Chaos.h>
+#include <MoreChaos.h>
 #include <Breathe.h>
 #include <Conductor.h>
 
@@ -15,10 +16,12 @@ void setup()
   _conductor.setup();
   ILedProgram *rotatingHue = new RotatingHue(&_conductor._common);
   _conductor.addProgram(rotatingHue);
-  ILedProgram *chaos = new Chaos(&_conductor._common);
-  _conductor.addProgram(chaos);
   ILedProgram *breathe = new Breathe(&_conductor._common);
   _conductor.addProgram(breathe);
+    ILedProgram *chaos = new Chaos(&_conductor._common);
+  _conductor.addProgram(chaos);
+    ILedProgram *moreChaos = new MoreChaos(&_conductor._common);
+  _conductor.addProgram(moreChaos);
 }
 
 void loop()
