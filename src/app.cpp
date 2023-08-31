@@ -8,20 +8,18 @@
 #include <Breathe.h>
 #include <Conductor.h>
 
-
-Conductor _conductor;
+boolean _debugEnabled = false;
+Conductor _conductor(_debugEnabled);
 
 void setup()
 {
   _conductor.setup();
-  ILedProgram *rotatingHue = new RotatingHue(&_conductor._common);
+  ILedProgram *rotatingHue = new RotatingHue(&_conductor._common, &_conductor._programCount);
   _conductor.addProgram(rotatingHue);
-  ILedProgram *breathe = new Breathe(&_conductor._common);
+  ILedProgram *breathe = new Breathe(&_conductor._common, &_conductor._programCount);
   _conductor.addProgram(breathe);
-    ILedProgram *chaos = new Chaos(&_conductor._common);
+  ILedProgram *chaos = new Chaos(&_conductor._common, &_conductor._programCount);
   _conductor.addProgram(chaos);
-    ILedProgram *moreChaos = new MoreChaos(&_conductor._common);
-  _conductor.addProgram(moreChaos);
 }
 
 void loop()

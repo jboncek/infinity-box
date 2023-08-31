@@ -9,6 +9,7 @@
 
 class LedCommon {
   public:
+    LedCommon(boolean debugEnabled):_debugEnabled(debugEnabled) {}
     void setup();
     
     // LedCommon() = delete;
@@ -31,7 +32,7 @@ class LedCommon {
 
     /// @brief Helper wraps the LED library to set the hue for all LEDs
     /// @return void
-    void setAllHue(uint8_t hue);
+    void setAllHue(uint8_t hue, uint8_t saturation = 255, uint8_t valueValue = 255);
 
     /// @brief Helper wraps the LED library to set the RGB color for an LED
     /// @return void

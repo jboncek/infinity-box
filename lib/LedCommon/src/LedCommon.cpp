@@ -9,7 +9,6 @@
 #define COLOR_ORDER GRB
 
 void LedCommon::setup(){
-    this->LedCommon::_debugEnabled = false;
     FastLED.addLeds<WS2812B, 7, GRB>(this->LedCommon::_leds, NUM_LEDS);
     FastLED.setBrightness(100);
     if(this->LedCommon::_debugEnabled){
@@ -51,7 +50,11 @@ void LedCommon::fade(uint8_t targetLux, int msDelay, uint8_t startingLux){
 /// @brief Helper wraps the LED library to set the lux for all LEDs
 /// @return void
 void LedCommon::setLux(uint8_t lux){
-    FastLED.setBrightness(lux);
+    if(lux >= MAX_LUX){
+        FastLED.setBrightness(MAX_LUX);
+    }else{
+        FastLED.setBrightness(lux);
+    }
 }
 
 /// @brief Helper wraps the LED library to set the hue for an LED
@@ -62,9 +65,9 @@ void LedCommon::setHue(int index, uint8_t hue) {
 
 /// @brief Helper wraps the LED library to set the hue for an LED
 /// @return void
-void LedCommon::setAllHue(uint8_t hue) {
+void LedCommon::setAllHue(uint8_t hue, uint8_t saturation = 255, uint8_t valueValue = 255) {
     for(int i = 0; i < NUM_LEDS; i++){
-        this->LedCommon::_leds[i] = CHSV(hue, 255, 255);
+        this->LedCommon::_leds[i] = CHSV(hue, saturation, valueValue);
     }
 }
 

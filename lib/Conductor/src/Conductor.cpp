@@ -10,7 +10,8 @@ void Conductor::setup(){
 };
 
 void Conductor::addProgram(ILedProgram* app){
-    int newProgramId = this->Conductor::_programCount++;
+    int newProgramId = this->_programCount++;
+    // this->_programCount++;
     //this->Conductor::_common.debug("program added", newProgramId);
     app->_programId = newProgramId;
     app->setup();
@@ -22,11 +23,10 @@ ILedProgram* Conductor::getActiveProgram(){
     int activeProgramIndex = map(result, 0, 1024, 0, this->Conductor::_programCount);
     ILedProgram* activeProgram = this->_apps[activeProgramIndex];
     if(activeProgram->_programId == this->Conductor::_currentProgramId){
-    //     //this->Conductor::_common.debug("new knob reading, activeProgramIndex", activeProgramIndex);
-    //     //this->Conductor::_common.debug("new knob reading, this->Conductor::_currentProgramId", this->Conductor::_currentProgramId);
         this->Conductor::_common.debug("Same knob reading", activeProgram->_programId);
     }else{
         this->Conductor::_common.debug("New knob reading", activeProgram->_programId);
+        activeProgram->setup();
         this->Conductor::_currentProgramId = activeProgram->_programId;
     }
     return activeProgram;

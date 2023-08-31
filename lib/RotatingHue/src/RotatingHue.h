@@ -8,13 +8,13 @@
 
 class RotatingHue: public ILedProgram {
     public:
-        RotatingHue(LedCommon* common):ILedProgram(common),_currentIndex(0),_currentHue(0),_common(common) {};
+        RotatingHue(LedCommon* common, int* programCount):ILedProgram(common),_programCount(programCount),_currentHue(0){};
         void setup();
         void main();
     private:
-        int _currentIndex;
+        int* _programCount;
         int _currentHue;
-        LedCommon* _common;
+        int _currentIndex;
         int getNextIndex();
         uint8_t getNextHue();
 };
