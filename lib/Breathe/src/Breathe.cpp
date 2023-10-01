@@ -28,7 +28,7 @@ void Breathe::main(){
     int appSegmentSize = 1024 / (*this->_programCount);
     int appMin = appSegmentSize * (this->_programId);
     int appMax = appSegmentSize * (this->_programId + 1);
-    int hue = map(result, appMin, appMax, 0, 255);
+    uint8_t hue = map(result, appMin, appMax, 0, 255) + 50;
     this->_common->debug("appSegmentSize", appSegmentSize);
     this->_common->debug("min", appMin);
     this->_common->debug("max", appMax);
@@ -39,7 +39,7 @@ void Breathe::main(){
         }else{
             this->_currentLux--;
         }
-        if(this->_currentLux == 0)
+        if(this->_currentLux == 10)
         {
             _currentDelay = this->_common->getRandomNumber(100,800) + millis();
             this->_isGoingUp = true;
